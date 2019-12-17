@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ request.user.username }}'s Game Records | U Know Uno{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}" />{% endblock %}
+
+{% block content %}
+<div style="background-color:#ebf9ff">
+    <div class="row" style="background-color:#ebf9ff">
+        <div class="col s4"></div>
+        <div class="col s4 section-title" style="text-align: center">
+            <h1>Game Records</h1>
+        </div>
+        <div class="col s4"></div>
+    </div>
+    <div class="row">
+        <div class="col s4 rep-background"></div>
+        <div class="col s4 rep-background">
+
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Players</th>
+                        <th>Winner</th>
+                        <th>Score</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center" id="playerInRoom">
+                    {% for record in game_records %}
+                    <tr>
+                        <td>{{ record.time }}</td>
+                        <td>{{ record.users }}</td>
+                        <td>{{ record.winner }}</td>
+                        <td>{{ record.score }}</td>
+                        <td>{{ record.result }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="/gameTables" class="btn waves-effect red darken-4"><i
+                    class="material-icons left">arrow_back</i>Back</a>
+        </div>
+        <div class="col s4 rep-background"></div>
+    </div>
+</div>
+{% endblock %}

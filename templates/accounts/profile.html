@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ request.user.username }}'s Profile | U Know Uno{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}"/>{% endblock %}
+{% block content %}
+    <div style="background-color:#ebf9ff">
+        <div class="row" style="background-color:#ebf9ff">
+            <input type="text" style="height: 0; width: 0" autofocus="autofocus">
+            <div class="col s4"></div>
+            <div class="col s4 section-title" style="text-align: center"><h1>Edit Profile</h1></div>
+            <div class="col s4"></div>
+        </div>
+        <div class="row">
+            <div class="col s4 rep-background" style="background-image: url('{% static '/img/accounts/uno_logo.jpeg' %}');"></div>
+            <div class="col s4 rep-background" style="background-image: url('{% static '/img/accounts/uno_logo.jpeg' %}');">
+                <form method="POST" enctype="multipart/form-data" style="background-color: white; margin-top: 10%;padding: 10% 10%;
+                    border-radius: 5%; text-align: center">{% csrf_token %}
+                    {#                    {{ update_form.as_p }}#}
+                    {% for field in update_form %}
+                        <div class="fieldWrapper">
+                            {{ field.errors }}
+                            {% if field.label != "Photo" %}
+                                {{ field.label_tag }} {{ field }}
+                            {% else %}
+                                {{ field.label_tag }} {{ field }} <input type="hidden" id="photoPath" name="photoPath" value="">
+                                <img src="{% static '' %}{{ request.user.photo }}" id="photoDisplay" >
+                                <button class="blue waves-effect waves-light btn-small" type='button' data-toggle="modal" data-target="#exampleModal">Change</button>
+                           
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Please Select A Photo</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <button type='button' class="photoSelect" value="img/photos/anon_user.png"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/anon_user.png'%}"></button>
+                                            <button type='button' class="photoSelect" value="img/photos/profilePhoto1.jpeg"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/profilePhoto1.jpeg' %}"></button>
+                                            <button type='button' class="photoSelect" value="img/photos/profilePhoto2.jpeg"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/profilePhoto2.jpeg' %}"></button>
+                                            <button type='button' class="photoSelect" value="img/photos/profilePhoto3.jpeg"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/profilePhoto3.jpeg' %}" ></button>
+                                            <button type='button' class="photoSelect" value="img/photos/profilePhoto4.jpeg"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/profilePhoto4.jpeg' %}"></button>
+                                            <button type='button' class="photoSelect" value="img/photos/profilePhoto5.jpeg"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/profilePhoto5.jpeg' %}"></button>
+                                            <button type='button' class="photoSelect" value="img/photos/profilePhoto6.jpeg"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/profilePhoto6.jpeg' %}"></button>
+                                            <button type='button' class="photoSelect" value="img/photos/profilePhoto7.jpeg"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/profilePhoto7.jpeg' %}"></button>
+                                            <button type='button' class="photoSelect" value="img/photos/profilePhoto8.jpeg"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/profilePhoto8.jpeg' %}"></button>
+                                            <button type='button' class="photoSelect" value="img/photos/profilePhoto9.jpeg"
+                                                    style="border: none;"><img
+                                                    class="btn btn-floating waves-effect circle"
+                                                    src="{% static 'img/photos/profilePhoto9.jpeg' %}"></button>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id = "close" type="button" class="red waves-effect waves-light btn-small" data-dismiss="modal">Close
+                                            </button>
+                                            <button id = "save" type="button" class="waves-effect waves-light btn-small" data-dismiss="modal">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                        <a href="/gameTables" class="btn waves-effect red darken-4"><i class="material-icons left">arrow_back</i>Cancel</a>
+                        <button class="btn waves-effect waves-light" type="submit" name="action" value="UPDATE">Update
+                            <i class="material-icons right">send</i>
+                        </button>
+                </form>
+            </div>
+    
+            <div class="col s4 rep-background" style="background-image: url('{% static '/img/accounts/uno_logo.jpeg' %}');"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $(function () {
+            $(".photoSelect").click(function () {
+                var path = $(this).val();
+                document.querySelector("#photoPath").value = path;
+                $('#photoDisplay').attr("src", '{% static '' %}' + path);
+            })
+            $("#save").click(function(){
+                var path = document.querySelector("#photoPath").value;
+                document.querySelector("#id_photo").value = path;
+            })
+        })
+    </script>
+{% endblock %}

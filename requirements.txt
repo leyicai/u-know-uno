@@ -1,0 +1,17 @@
+asgi-redis==1.4.3
+asgiref==3.2.3
+channels==2.3.1
+channels-redis==2.4.1
+daphne==2.3.0
+Django==2.2.6
+gunicorn==20.0.0
+hiredis==1.0.0
+psycopg2-binary==2.8.4
+pytz==2019.3
+redis==2.10.6
+sqlparse==0.3.0
+whitenoise==4.1.4
+dj-database-url==0.5.0
+Pillow==5.1.0
+python-http-client==3.2.1 
+sendgrid==6.1.0

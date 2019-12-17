@@ -1,0 +1,483 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #e8eaf6;
+}
+
+#gameContainer {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#gameRow {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+#inGamePanel {
+    width: 100%;
+    height: 100%;
+}
+
+#gamePanel {
+    background-color: #e8eaf6;
+    height: 100%;
+}
+
+#buttonsOfRoom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+#leftCol,
+#leftPlayerCardsDiv{
+    height: 100%;
+}
+
+#rightPlayerCards,
+#topPlayerCards,
+#leftPlayerCards {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 120px;
+    height: 180px;
+    display: none;
+}
+
+#leftPlayerUno{
+    position: absolute;
+    top: 62%;
+    display: none;
+    color: orange;
+    font-weight: bold;
+}
+#leftPlayerReady,#leftPlayerCurrent{
+    position: absolute;
+    top: 25%;
+    display: none;
+    color: orange;
+    font-weight: bold;
+}
+
+#middleCol {
+    padding: 0;
+    height: 100%;
+}
+
+#middleTopRow {
+    margin: 0 auto;
+    height: 33%;
+}
+#topPlayerDiv{
+    height: 100%;
+}
+#topPlayerCardsDiv {
+    height: 80%;
+    width: 100%;
+}
+#topPlayerInfo{
+    height: 20%;
+}
+
+#topPlayerCards {
+    margin: 10px;
+    display: none;
+}
+#topPlayerName{
+    display: none;
+    height: 3rem;
+    line-height: 3rem;
+}
+#topPlayerReady, #topPlayerUno {
+    display: none;
+    margin-left: 20px;
+    color: orange;
+    font-weight: bold;
+    height: 3rem;
+    line-height: 3rem;
+}
+
+#topPlayerCurrent{
+    display: none;
+    margin-left: 20px;
+    color: orange;
+    font-weight: bold;
+}
+#middleCol{
+    height: 100%;
+}
+
+#middle {
+    margin: 0 auto;
+    height: 33%;
+}
+#deckImg{
+    top: -50%;
+}
+
+#middleBottomRow {
+    height: 33%;
+    margin: 0 auto;
+    position: absolute;
+    width: 100%;
+}
+#middleRightCol{
+    height: 80%;
+}
+#currentColorDiv{
+    height: 34%;
+    margin: 0;
+    padding: 0;
+}
+#currentColorLabel{
+    display: none;
+    font-family: 'Indie Flower', cursive;
+}
+#currentColor{
+    margin-left:5px;
+    display: none;
+    border-radius: 5px;
+    height: 30px;
+    width: 40%;
+    color: #000000;
+}
+#currentOrderDiv{
+    height: 34%;
+    margin: 0;
+    padding: 0;
+}
+#currentOrder{
+    height: 35px;
+    display: none;
+}
+#currentOrderLabel{
+    display: inline;
+    font-family: 'Indie Flower', cursive;
+}
+.orderImg{
+    margin-left:5px;
+    height: 25px;
+    display: none;
+}
+#currentPlayerRow {
+    width: 100%;
+    margin: 0 auto;
+    height: 20%;
+}
+#unoBtnDiv{
+    height: 32%;
+    margin: 0;
+    padding: 0;
+}
+
+#passwordRow {
+    width: 100%;
+    margin: 0 auto;
+    height: 260px;
+}
+
+
+#buttonRow {
+    width: 100%;
+    height: 40px;
+}
+
+#unoButton {
+    display: none;
+    height: 30px;
+    width: 85px;
+    border-radius: 5px;
+    line-height: 30px;
+}
+
+#ownCardsDiv {
+    height:180px;
+    width: 100%;
+    bottom: 0;
+}
+
+#ownCards {
+    width: 100%;
+    height: 180px;
+    position: absolute;
+}
+
+.ownCard {
+    width: 120px;
+    height: 180px;
+    position: absolute;
+    top: 20px;
+}
+
+.ownCard:hover {
+    top: -10px;
+}
+
+.card {
+    width: 120px;
+    height: 180px;
+    border-radius: 15px;
+    padding: 1px;
+    border: 2px solid #000000;
+}
+
+#rightCol,
+#rightColRow,
+#rightPlayerCardsDiv {
+    height: 100%;
+}
+
+#rightPlayerUno {
+    position: absolute;
+    top: 62%;
+    display: none;
+    color: orange;
+    font-weight: bold;
+}
+
+
+#rightPlayerCurrent, #rightPlayerReady{
+    position: absolute;
+    top: 25%;
+    display: none;
+    color: orange;
+    font-weight: bold;
+}
+
+#rightPanel {
+    margin: 3px 0;
+    padding: 0;
+}
+#passwordDiv{
+    margin-left: 20px;
+}
+#playerInfoPanel {
+    margin: 0;
+    padding: 0;
+    height: 50%;
+    /* width: 100%; */
+    background-color: #d1c4e9;
+    overflow-y: scroll;
+}
+
+#chatPanel {
+    margin: 0;
+    padding: 0;
+    height: 50%;
+    width: 100%;
+    background-color: #d1c4e9;
+    overflow-y: scroll;
+}
+
+#beforeGameRow {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#startGameBtn {
+    height: 36px;
+    width: 120px;
+}
+
+#calledUNO {
+    color: orange;
+    font-weight: bold;
+    font-size: larger;
+    display: none;
+}
+
+#photo {
+    margin: 25px;
+    width: 85px;
+    height: 85px;
+}
+
+#startGameBtn {
+    background-color: #1a237e;
+}
+
+#losePage {
+    background-color: #d1c4e9;
+}
+
+.otherPlayerCardImg {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: -50%;
+    top: -50%;
+}
+
+#deckDiv {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    width: 120px;
+    height: 180px;
+    display: none;
+}
+
+#currentCardDiv {
+    display: none;
+    top: 50%;
+    position: absolute;
+    left: 60%;
+    width: 120px;
+    height: 180px;
+    /* display: none; */
+}
+
+#ready {
+    display: none;
+    color: orange;
+    font-weight: bold;
+}
+
+#yourRound {
+    margin: 0 auto 10px;
+    width: 200px;
+    font-size: 20px;
+    display: none;
+    color: orange;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Indie Flower', cursive;
+}
+#progressRow{
+    width: 100%;
+    padding: 0;
+    margin: 10px auto 30px;
+    height: 20px;
+}
+
+#progressBar {
+    margin: 2px auto 0;
+    width: 200px;
+    height: 12px; -webkit-border-radius: 10px;
+    padding: 1px;
+}
+
+#progress{
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#7BC3FF), color-stop(0.5,#42A9FF), to(#7BC3FF));
+    width: 0%; height: 100%;
+    -webkit-border-radius: 10px;
+    -webkit-transition: width 60s ease-in-out;
+}
+
+#username{
+    margin:10px;
+}
+.beginPic{
+    width: 10%;
+    height: 18%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    border: none;
+    font-size: 100px;
+    z-index:9999;
+}
+
+.effectDiv{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 33%;
+    width: 33%;
+    display: none;
+    z-index: 500;
+}
+
+.effectImg{
+    position:absolute;
+    top: -50%;
+    left: -50%;
+    height: 100%;
+    z-index: 500;
+}
+
+#leftPlayerName{
+    position: absolute;
+    top: 32%;
+    display: none;
+}
+#rightPlayerName{
+    position: absolute;
+    top: 32%;
+    display: none;
+}
+.choose-color-first,.choose-color-second{
+    border-radius:5px;
+    width: 80px;
+    height: 35px;
+}
+.choose-color-first{
+    margin-right:20px;
+}
+#choose-color-first-row, #choose-color-second-row{
+    width: 100%;
+    height: 50%;
+}
+#choose-color-first-row{
+    margin-top: 10px;
+}
+
+.red{
+    background-color: #F44336;
+}
+.yellow{
+    background-color: #ffeb3b;
+}
+.blue{
+    background-color: #2196F3;
+}
+.green{
+    background-color: #4CAF50;
+}
+.readyImg{
+    height: 4rem;
+}
+.currentRoundImg{
+    height: 3rem;
+}
+
+#currentCardTip{
+    position:absolute;
+    top: -65%;
+    height: 30px;
+    left: 15%;
+    line-height: 30px;
+    font-family: 'Indie Flower', cursive;
+}
+#drawCardTip{
+    position:absolute;
+    top: -65%;
+    height: 30px;
+    left: 10%;
+    line-height: 30px;
+    font-family: 'Indie Flower', cursive;
+}
+#drawCardTipIcon{
+    transform:rotate(180deg);
+    position:absolute;
+    top: -65%;
+    height: 30px;
+    right: 10%;
+    line-height: 30px;
+}
+
+#rules-modal { 
+    width: 35% !important; 
+    max-height: 50% !important; 
+    overflow: visible;
+} 

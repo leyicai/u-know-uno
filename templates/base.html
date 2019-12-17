@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}U Know Uno{% endblock %}</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- materialize -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <!-- animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <!-- lobby.css -->
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/lobby.css' %}"/> -->
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+<div id = "popoverCard" class="col s12 m7 profile_popover" style="display: none; background-color: inherit">
+                <div class="card horizontal" style="background-color: inherit">
+                    <div style="text-align: center">
+                        <img class="popover_photo circlePhoto" src="">
+                    </div>
+                    <div class="card-stacked">
+                        <div class="card-content">
+                            <ul class="list-group">
+                                <li class="currentPlayerInfo popover_nickname"></li>
+                                <li class="currentPlayerInfo popover_gender"></li>
+                                <li class="currentPlayerInfo popover_birthday"></li>
+                                <li class="currentPlayerInfo popover_score"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% block content %}{% endblock %}
+</body>
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
+<!-- bootstrap -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+</script>
+<!-- materialize -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{#<!-- fontawesome -->#}
+<!-- {#<script src="https://kit.fontawesome.com/8331aaf8ef.js" crossorigin="anonymous"></script>#} -->
+
+{% block js %}{% endblock %}
+<script>
+    newPop = '';
+    $(function () {
+        $(document).ready(function () {
+            $('.parallax').parallax();
+        });
+        $(".sendFriendRequest").click(function (e) {
+            e.preventDefault();
+            var friendRequest = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '{% url 'friends:friendRequest' %}',
+                data: {
+                    'friendRequest': friendRequest
+                },
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+            var toastHTML = '<span>Email delivered</span><button class="btn-flat toast-action">OK</button>';
+            M.toast({html: toastHTML});
+        });
+        $(".getProfile").popover({
+            placement: "right",
+            trigger: 'click',
+            container: 'body',
+            html:true,
+            content: function () {
+               return getTheProfile($(this).val())
+            }
+        });
+    });
+
+    function getTheProfile(username){
+        $.ajax({
+                type: "POST",
+                url: '{% url 'friends:getProfile' %}',
+                async: false,
+                data: {
+                    'profile_username': username,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    newPop = createAPopover(data);
+                }
+            });
+        return newPop;
+    }
+    function createAPopover(data) {
+        var popoverDiv = $("#popoverCard").clone();
+        popoverDiv.removeAttr("id");
+        popoverDiv.className+="profile_popover";
+        var image = popoverDiv.find(".popover_photo");
+        image.attr('src', {% static '' %} + data["photo"]);
+        var username = popoverDiv.find(".popover_nickname");
+        username.html("NickName: " + data['username']);
+        var score = popoverDiv.find(".popover_score");
+        score.html("Socre: " + data['score']);
+        var bitrhday = popoverDiv.find(".popover_birthday");
+        bitrhday.html("Birthday: " + data['birthday']);
+        var gender = popoverDiv.find('.popover_gender');
+        gender.html("Gender: " + data['gender']);
+        popoverDiv.show();
+        return popoverDiv;
+    }
+</script>
+</html>

@@ -1,0 +1,49 @@
+{% load static %}
+<table class="striped">
+    <thead>
+    <tr>
+        <th>Avatar</th>
+        <th>Username</th>
+        <th>Score</th>
+        <th>Friend</th>
+    </tr>
+    </thead>
+    <tbody style="text-align: center" id="playerInRoom">
+        <tr>
+            <td><button class="circle circlePhoto getProfile"
+                     data-toggle="popover" data-placement="bottom"
+                        style="background-color: inherit; border: none"
+                     value="{{ request.user.username }}">
+                    <img class="circle circlePhoto" src="{% static '' %}{{ request.user.photo }}">
+                </button>
+            </td>
+            <td>{{ request.user.username }}</td>
+            <td>{{ request.user.score }}</td>
+            <td>
+                <button class="addFriendsButton waves-light waves-effect"><i
+                        class="material-icons small profilePhotoandIconStyle ">settings</i></button>
+            </td>
+        </tr>
+    {% for user in user_list %}
+        {% if user != request.user %}
+        <tr>
+            <td><button class="circle circlePhoto getProfile"
+                     data-toggle="popover" data-placement="bottom"
+                        style="background-color: inherit; border: none"
+                     value="{{ user.username }}">
+                    <img class="circle circlePhoto" src="{% static '' %}{{ user.photo }}">
+                </button>
+            </td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.score }}</td>
+            {% if user in request.user.friends.all %}
+                <td><button class = "addFriendsButton disabled waves-light waves-effect"><i class="material-icons small profilePhotoandIconStyle" >done</i></button></td>
+            {% else %}
+                <td><button type = "submit" class = "addFriendsButton sendFriendRequest waves-light waves-effect" value = {{ user.username }} ><i class="material-icons small profilePhotoandIconStyle" >person_add</i></button></td>
+            {% endif %}
+        </tr>
+        {% endif %}
+        
+    {% endfor %}
+    </tbody>
+</table>

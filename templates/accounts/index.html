@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home | U Know Uno{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}"/>{% endblock %}
+
+{% block content %}
+    <div class="container justify-content-center">
+        <div class="image_container">
+            <input type="text" style="height: 0; width: 0" autofocus="autofocus">
+            <img class="index-img circle" id="logoPicture" src="{% static '/img/accounts/uno_logo.jpg' %}" alt="logo">
+        </div>
+    </div>
+    <div class="parallax-container">
+        <div id="background1" class="parallax"><img src="{% static '/img/index/background.jpg' %}"></div>
+    </div>
+    <div class="container" style="text-align: center">
+        <div class="section white">
+            <div class="row container information_box">
+                <h2 class="header section-title">Login</h2>
+                <form method="POST">
+                {% csrf_token %}
+                {{ login_form }}
+                <input type="hidden" name="next" value="{{ next }}">
+                <button id="login-btn" class="btn waves-effect waves-light " type="submit" name="action" value="LOGIN">Login
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+            </div>
+        </div>
+    </div>
+    <div class="parallax-container">
+        <div id="background1" class="parallax"><img src="{% static '/img/index/background.jpg' %}"></div>
+    </div>
+    <div class="container" style="text-align: center">
+        <div class="section white">
+            <div class="row container information_box">
+                <h2 class="header section-title">Register</h2>
+                <form method="POST">
+                {% csrf_token %}
+                {{ register_form.as_p }}
+                <input type="hidden" name="next" value="{{ next }}">
+                <button id="register-btn" class="btn waves-effect waves-light" type="submit" name="action" value="REGISTER">
+                    Register
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

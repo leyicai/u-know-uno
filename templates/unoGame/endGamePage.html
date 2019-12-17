@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Game Over | U Know Uno{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/endGame.css' %}" />
+{% endblock %}
+{% block content %}
+<div class="container valign-wrapper">
+    <div class="row align-items-center justify-content-center">
+        <div class="col s12 m7 center-align">
+            <img class="endPic" src="{% static '' %}{{img_src}}">
+            <h5>{{ message }}</h5>
+            <a class="waves-effect btn returnBtn" href="{% url 'gameTables:homepage' %}">return game lobby</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

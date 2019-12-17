@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<!-- uno.css -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/uno.css' %}"/>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row align-items-center justify-content-center" id="choose-color-first-row">
+            <button onclick="chooseColor('red','{{ id }}');" class="btn red choose-color-first">red</button>
+            <button onclick="chooseColor('yellow','{{ id }}');" class="btn yellow choose-color-second">yellow</button>
+        </div>
+        <div class="row align-items-center justify-content-center" id="choose-color-second-row">
+            <button onclick="chooseColor('green','{{ id }}');" class="btn green choose-color-first">green</button>
+            <button onclick="chooseColor('blue','{{ id }}');" class="btn blue choose-color-second">blue</button>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        function chooseColor(color, id) {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.playCardWithChosenColor(id, color);
+            parent.layer.close(index);
+        }
+    </script>
+{% endblock %}

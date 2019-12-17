@@ -1,0 +1,23 @@
+<div style="height: 100%; width: 100%">
+    <nav id="chatNavBar" class="col sticky-top">
+                    <!-- <div class="nav-wrapper"> -->
+                    <i class="small material-icons brand-logo">chat</i>
+                    <!-- </div> -->
+    </nav>
+    <div id = "chatArea" class="row">
+        <div id = "message" class = "container-fluid">
+        </div>
+        <div id = "chat_sender_Area" class="form-inline row">
+            <input id="username" type="hidden" value="{{ request.user.username }}">
+            <div id = "icon_in_sender_area" class="form-group ">
+                <i id = "edit_icon" class="material-icons col">mode_edit</i>
+            </div>
+            <div id = "input_in_sender_area" class="form-group ">
+                <input id = "chat-message-input"  type="text" class="form-control">
+            </div>
+            <div id = "button_in_sender_area" class="form-group ">
+                <button id = "chat-message-submit" type="submit" class="btn" value = "Send">Send</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,440 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Game | U Know Uno
+{% endblock title %}
+{% block css %}
+    <!-- uno.css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/uno.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/lobby.css' %}"/>
+    <!-- jquery-confirm -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+    <!-- Font of Tips -->
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <div id="rules-modal" class="modal">
+        <div class="modal-content">
+          <h4>U Know Uno Rules</h4>
+          <p>
+              1. Up to 4 players can join a game before it begins. 
+              <br>
+              2. If less than 4 people join the game, computer players will be used to fill in the extra spaces. 
+              <br>
+              2. Each player starts with 7 cards.
+              <br>
+              3. During their turn, a player can pick a card or play a card from their hand.
+              <br>
+              4. Players can only play cards which are of the same number or color of the card currently at the top of the played stack. Additionally, players can play special cards if they have them.
+              <br>
+              5. If a player does not play within a minute of their turn, they will automatically draw a card and their turn will be skipped. 
+              <br>
+              6. Leaving the game room before the game is over will result in points deducted from a player's overall score. 
+              <br>
+              7. Players with only one card in their hand must declare 'Uno' immediately. They will draw a penalty card if they do not do so after 5 seconds.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="modal-close waves-effect waves-green btn">Let's Play!</a>
+        </div>
+      </div>
+
+    <div id="unoGame">
+        <div class="container-fluid" id="gameContainer">
+            <div class="row" id="gameRow">
+                <div id="buttonsOfRoom">
+                    <button onclick="leave()" class="btn btn-danger" id="leaveBtn">Leave Room
+                    </button>
+                    <a id="ruleButton" class="btn modal-trigger" href="#rules-modal">Rules</a>
+                </div>
+
+                <div class="col col-9" id="gamePanel">
+
+                    <div id="reverse" class="effectDiv">
+                        <img id="reverseImg" class="effectImg"
+                             src="{% static 'img/unoGame/reverse.png' %}" alt="reversePic">
+                    </div>
+
+                    <div id="skip" class="effectDiv">
+                        <img id="skipImg" class="effectImg"
+                             src="{% static 'img/unoGame/skip3.png' %}" alt="skipPic">
+                    </div>
+                    <div id="drawCard" class="effectDiv">
+                        <img id="drawCardImg" class="effectImg"
+                             src="{% static 'img/unoLobbyIcon/uno-icon-ready.png' %}" alt="changeColorPic">
+                    </div>
+                    <div id="changeColor" class="effectDiv">
+                        <img id="changeColorImg" class="effectImg"
+                             src="{% static 'img/unoLobbyIcon/uno-icon-start.png' %}" alt="drawCardPic">
+                    </div>
+
+                    <div id="inGamePanel" class="row">
+                        <div class="col-3" id="leftCol">
+                            <div class="row align-items-center justify-content-center" id="leftPlayerCardsDiv">
+                                <div id="leftPlayerName">
+                                    player 4
+                                </div>
+                                <div id="leftPlayerReady">
+                                    Ready!
+                                    <img class="readyImg" src="{% static 'img/unoGame/hand.gif' %}"
+                                         alt="hand">
+                                </div>
+                                <div id="leftPlayerCurrent">
+                                    <img class=" animated bounce faster currentRoundImg"
+                                         src="{% static 'img/unoGame/pokemon-ball.png' %}"
+                                         alt="pokemonBall">
+                                </div>
+                                <div id="leftPlayerCards">
+                                    <img src="{% static 'img/unoGame/unoCards/back.png' %}"
+                                         class="card otherPlayerCardImg">
+                                </div>
+                                <div id="leftPlayerUno" class="animated faster shake">UNO!</div>
+                            </div>
+                        </div>
+                        <div class="col-6" id="middleCol">
+                            <div class="row" id="middleTopRow">
+                                <div class="col" id="topPlayerDiv">
+                                    <div id="topPlayerCardsDiv" class="row align-items-center justify-content-center">
+                                        <div style="position: absolute">
+                                            <div id="topPlayerCards">
+                                                <img src="{% static 'img/unoGame/unoCards/back.png' %}"
+                                                     class="card otherPlayerCardImg">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row  align-item-start justify-content-center" id="topPlayerInfo">
+                                        <div id="topPlayerName">
+                                            player 3
+                                        </div>
+                                        <div id="topPlayerReady">
+                                            Ready!
+                                            <img class="readyImg" src="{% static 'img/unoGame/hand.gif' %}"
+                                                 alt="hand">
+                                        </div>
+                                        <div id="topPlayerUno" class="animated faster shake">UNO!</div>
+                                        <div id="topPlayerCurrent">
+                                            <img class=" animated bounce faster currentRoundImg"
+                                                 src="{% static 'img/unoGame/pokemon-ball.png' %}"
+                                                 alt="pokemonBall">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="middle" class="row align-items-center justify-content-center">
+                                <div class="col-9" id="middleCol">
+                                    <div id="deckDiv">
+                                        <img id="deckImg" src="{% static 'img/unoGame/unoCards/back.png' %}"
+                                             class="card" alt="back">
+                                        <span id="drawCardTip">draw card</span>
+                                        <i id="drawCardTipIcon" class="material-icons">touch_app</i>
+                                    </div>
+                                    <div id="currentCardDiv">
+                                        <input type="hidden"
+                                               value="{{ currentCard.id }}_{{ currentCard.color }}_{{ currentCard.card_type }}"
+                                               id="currentCard">
+                                        <span id="currentCardTip">current card</span>
+                                    </div>
+                                </div>
+                                <div class="col-3 align-items-center justify-content-center" id="middleRightCol">
+                                    <div class="row align-items-center justify-content-center" id="currentColorDiv">
+                                        <span id="currentColorLabel">Color</span>
+                                        <button id="currentColor" disabled></button>
+                                    </div>
+                                    <div class="row align-items-center justify-content-center" id="currentOrderDiv">
+                                        <div id="currentOrder">
+                                            <div id="currentOrderLabel">Direction</div>
+                                            <img id="counterclockwise" class="orderImg"
+                                                 src="{% static 'img/unoGame/counterclockwise.png' %}"
+                                                 alt="counterclockwise">
+                                            <img id="clockwise" src="{% static 'img/unoGame/clockwise.png' %}"
+                                                 alt="counterclockwise" class="orderImg">
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center justify-content-center" id="unoBtnDiv">
+                                        <button id="unoButton" class="waves-effect waves-light btn cyan" onclick="uno();">
+                                            UNO
+                                        </button>
+                                        <span id="calledUNO"> U N O </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <input type="hidden" id="curOrder" name="curOrder" value="">
+                            <input type="hidden" id="drawCardCount" value="0" name="drawCardCount">
+                            <input type="hidden" id="username" name="username" value="{{ request.user.username }}">
+
+                            <div id="buttonRow" class="row align-items-center justify-content-center">
+                                <button id="readyBtn" class="btn waves-effect">READY!</button>
+                                <span id="ready">
+                                    R E A D Y
+                                    <img class="readyImg" src="{% static 'img/unoGame/hand.gif' %}"
+                                         alt="hand">
+                                </span>
+                                <div id="passwordDiv">
+                                    {% if is_creator %}
+                                        <div id="gamePassword">
+                                            {% if password != "" %}
+                                                <div class="row align-items-center justify-content-center"
+                                                     id="gamePasswordDisplayDiv">
+                                                    <p>Game Password: {{ password }}</p>
+                                                </div>
+                                            {% else %}
+                                                <button id="generatePasswordBtn" class="btn waves-effect"
+                                                        onclick="generatePassword()">Generate Password
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div id="yourRoundDiv" style="height: 3rem;">
+                                <div id="yourRound">
+                                    Your Round
+                                    <img class="animated bounce faster currentRoundImg"
+                                         src="{% static 'img/unoGame/pokemon-ball.png' %}"
+                                         alt="pokemonBall">
+                                </div>
+                            </div>
+                            <div id="progressBar">
+                                <div id="progress"></div>
+                            </div>
+
+                            <div id="ownCardsDiv" class="row align-items-center justify-content-center">
+                                <input type="hidden" name="minEmptyIndex" id="minEmptyIndex" value="0">
+                                <input type="hidden" name="cardDistance" id="cardDistance" value="60">
+                                <div id="ownCards">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="rightCol" class="col-3">
+                            <div id="rightPlayerCardsDiv" class="row align-items-center justify-content-center">
+                                <div id="rightPlayerName">
+                                    player 4
+                                </div>
+                                <div id="rightPlayerReady">
+                                    Ready!
+                                    <img class="readyImg" src="{% static 'img/unoGame/hand.gif' %}"
+                                         alt="hand"></div>
+                                <div id="rightPlayerCurrent">
+                                    <img class=" animated bounce faster currentRoundImg"
+                                         src="{% static 'img/unoGame/pokemon-ball.png' %}"
+                                         alt="pokemonBall">
+                                </div>
+                                <div id="rightPlayerCards">
+                                    <img src="{% static 'img/unoGame/unoCards/back.png' %}"
+                                         class="card otherPlayerCardImg">
+                                </div>
+                                <div id="rightPlayerUno" class="animated faster shake">UNO!</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-lg-3">
+                    <div id="playerInfoPanel">
+                        {% include 'playerInfoPanel.html' %}
+                    </div>
+                    <div id="chatPanel">
+                        {% include "chatting/chatPanel.html" %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/layer/2.3/layer.js"></script>
+    <script>
+
+        $(document).ready(function(){
+        setTimeout(function(){
+            $('#rules-modal').modal();
+            $('#rules-modal').modal('open'); 
+        },500);
+        });
+
+        function addAnimate() {
+            $('#readyBtn').css("display", "none");
+            $('#ready').css("display", "block");
+            var img = document.createElement('img');
+            img.src = "{% static 'img/unoLobbyIcon/uno-icon-start.png' %}";
+            img.className += "beginPic animated flipOutX";
+            document.getElementById('gamePanel').appendChild(img);
+        }
+
+        /** other player draw card effect **/
+        function playerDrawCardEffect(playerDivId, animateClassName) {
+            var drawCardHiddenField = $('#drawCardCount');
+            var curDrawCardCount = drawCardHiddenField.val();
+            var cardDiv = $('#' + playerDivId);
+            var drawCardImg = $('<img/>', {
+                "id": "back_for_animation_" + curDrawCardCount,
+                "src": "{% static 'img/unoGame/unoCards/back.png' %}",
+                "class": "card otherPlayerCardImg animated " + animateClassName + " fast",
+                "alt": "back",
+            });
+            drawCardHiddenField.val(parseInt(curDrawCardCount) + 1);
+            cardDiv.append(drawCardImg);
+            const element = document.querySelector('#back_for_animation_' + curDrawCardCount);
+            element.addEventListener('animationend', function () {
+                document.getElementById(playerDivId).removeChild(document.getElementById('back_for_animation_' + curDrawCardCount));
+            });
+        }
+
+        /** add one card into own cards **/
+        function getOneCard(card, animateClass) {
+            var zIndex = parseInt(document.getElementById('minEmptyIndex').value);
+            var curCardDistance = parseInt($('#cardDistance').val());
+            var left = zIndex * curCardDistance;
+            document.getElementById('minEmptyIndex').value = zIndex + 1;
+            var newCard = $('<div/>', {
+                "class": "ownCard",
+                "id": card.id,
+                "style": "z-index: " + zIndex + ";left: " + left + "px;",
+            });
+            $('#ownCards').append(newCard);
+            newCard = $('#' + card.id);
+            newCard.data({
+                color: card.color,
+                number: card.card_type,
+                id: card.id,
+                img_src: card.img_src
+            });
+            newCard.click(function () {
+                playOneCard($(this).data('color'), $(this).data('number'), $(this).data('id'));
+            });
+            var newCardImg = $('<img/>', {
+                "src": '{% static '' %}' + card.img_src,
+                "class": "card animated " + animateClass,
+                "alt": card.color + "_" + card.card_type
+            });
+            newCard.append(newCardImg);
+        }
+
+        /** player play one card effect **/
+        function playCardEffect(id, color, number, img_src, animateClassName) {
+
+            // get previous current card img
+            var previousCurrent = document.getElementById('currentCard').value;
+            var previousId = previousCurrent.split("_")[0];
+            var previousCardImg = document.getElementById('currentCardImg_' + previousId);
+
+            // generate the new current card and show the animation
+            var currentCardDiv = $('#currentCardDiv');
+            var currentCardImg = $('<img />', {
+                "src": {% static '' %} +img_src,
+                "class": "card animated " + animateClassName + " fast",
+                "alt": color + "_" + number,
+                "style": "position: absolute;left:0px; top:-50%;z-index:100;",
+                "id": "currentCardImg_" + id,
+            });
+            currentCardDiv.append(currentCardImg);
+            document.getElementById('currentCard').value = id + "_" + color + "_" + number;
+
+            const newCurrentCardImg = document.querySelector("#currentCardImg_" + id);
+            newCurrentCardImg.addEventListener('animationend', function () {
+                document.getElementById('currentCardDiv').removeChild(previousCardImg);
+            })
+        }
+
+        /** initialize current card **/
+        function initializeCurrentCard(card) {
+            var currentCardDiv = $('#currentCardDiv');
+            var currentCardImg = $('<img />', {
+                "src": {% static '' %} +card.img_src,
+                "class": "card animated flipInX fast",
+                "alt": card.color + "_" + card.card_type,
+                "style": "position: absolute;left:0px; top:-50%;z-index:100;",
+                "id": "currentCardImg_" + card.id,
+            });
+            currentCardDiv.append(currentCardImg);
+            document.getElementById('currentCard').value = card.id + "_" + card.color + "_" + card.card_type;
+        }
+
+        /** show player info **/
+        function showPlayerInfo(player) {
+            var username = $('#username').val();
+            var playerInRoom = $('#playerInRoom');
+            var playerInfo = $('<tr />');
+            var playerAvatar = $('<td />');
+            var playerAvatarImg = $('<img />', {
+                "class": "btn btn-floating waves-effect circle",
+                "style": "width : 35px; height: 35px; margin: 5px;",
+                "src": '{% static '' %}' + player.photo,
+            });
+            playerAvatar.append(playerAvatarImg);
+            var playerUsername = $('<td />').html(player.username);
+            var playerScore = $('<td />').html(player.score);
+            var playerFriend = $('<td />');
+            if (username == player.username) {
+                var ownAddFriendBtn = $('<button />', {
+                    "class": "addFriendsButton",
+                });
+                var ownAddFriendIcon = $('<i />', {
+                    "class": "material-icons small profilePhotoandIconStyle",
+                }).html("settings");
+                ownAddFriendBtn.append(ownAddFriendIcon);
+                playerFriend.append(ownAddFriendBtn);
+            } else {
+                if (player.friends.includes(username)) {
+                    var addFriendBtn = $('<button />', {
+                        "class": "addFriendsButton sendFriendRequest waves-light waves-effect",
+                        "type": "submit",
+                        "value": player.username
+                    });
+                    var addFriendIcon = $('<i />', {
+                        "class": "material-icons small profilePhotoandIconStyle"
+                    }).html("done");
+                    addFriendBtn.append(addFriendIcon);
+                    playerFriend.append(addFriendBtn);
+                } else {
+                    var friendRequestBtn = $('<button />', {
+                        "type": "submit",
+                        "name": "friendsRequest",
+                        "class": "addFriendsButton sendFriendsRequest",
+                        "value": player.username
+                    });
+                    friendRequestBtn.click(function (e) {
+                        e.preventDefault();
+                        var friendRequest = $(this).val();
+                        $.ajax({
+                            type: "POST",
+                            url: '{% url 'friends:friendRequest' %}',
+                            data: {
+                                'friendRequest': friendRequest
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.is_taken) {
+                                }
+                            }
+                        });
+                    });
+                    var personAddIcon = $('<i />', {
+                        "class": "material-icons small profilePhotoandIconStyle"
+                    }).html("person_add");
+                    friendRequestBtn.append(personAddIcon);
+                    playerFriend.append(friendRequestBtn);
+                }
+            }
+            playerInfo.append(playerAvatar);
+            playerInfo.append(playerUsername);
+            playerInfo.append(playerScore);
+            playerInfo.append(playerFriend);
+            playerInRoom.append(playerInfo);
+        }
+
+    </script>
+    <script src="{% static 'js/gameChatChannels.js' %}"></script>
+    <script src="{% static 'js/gameChannels.js' %}"></script>
+    <script src="{% static 'js/generatePassword.js' %}"></script>
+
+{% endblock js %}

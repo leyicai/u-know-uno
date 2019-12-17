@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Game Lobby | U Know Uno{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/lobby.css' %}" />
+<!-- Logo Font-->
+<link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> 
+{% endblock %}
+{% block content %}
+<div>
+    <input type="text" style="height: 0; width: 0" autofocus="autofocus">
+    <nav id="gameLobbyNavBar" class="fixed-top">
+        <div class="nav-wrapper">
+            <p  class="brand-logo center" id="unoLogo">U Know UNO</p>
+            <ul id="nav-mobile" class="left hide-on-med-and-down">
+                <li>
+                    <a href="/accounts/profile"><img id="currentPlayerPhoto"
+                            class="btn btn-floating waves-effect circle" src="{% static '' %}{{ request.user.photo }}"></a>
+                </li>
+                <ul class="list-group">
+                    <li class="currentPlayerInfo">Nickname: {{ request.user.username }} </li>
+                    <li class="currentPlayerInfo">Score: {{ request.user.score }}</li>
+                    <li class="currentPlayerInfo">Rank: {{ request.user.rank }}</li>
+                    <li class="currentPlayerInfo"><a href="/accounts/game_records" style="padding: 0;
+margin: 0; height:0;"><U style="border-bottom: 1.5px solid white;">Game Records</U></a></li>
+                </ul>
+            </ul>
+            <div class="col l6 m6 s12">
+                <ul id="nav-mobile" class=" right hide-on-med-and-down">
+                    <form method="POST" action="/accounts/logout">
+                        {% csrf_token %}
+                        <li>
+                            <button id="logoutButton" type="submit" class="waves-effect waves-light btn">Log
+                                out
+                            </button>
+                        </li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<!-- Page Layout here -->
+<div calss="container" style="height:100vh">
+    <div>
+        <button class="balancePadding disabled"></button>
+    </div>
+    <div class="row" id="firstPanel">
+        <div id="tablePanel" class="col col-lg-9">
+            <div id="unoGame" class="container">
+                <div class="col col-lg-4">
+                    <div class="col playerDiv">
+                        <a id="createTableButton" href="" class="waves-effect tableButton">
+                            <i id="createTableIcon" class="medium material-icons">add</i>
+                        </a>
+                    </div>
+                </div>
+                {% for game in games %}
+                <div class="col col-lg-4">
+                    <div class="col playerDiv">
+                        {% if game.is_started %}
+                        <a class="waves-effect tableButton z-depth-3"><img class="gameIcon"
+                                src="{% static 'img/unoLobbyIcon/uno-icon-start.png' %}" /></a>
+                        {% else %}
+                        <a class="waves-effect tableButton z-depth-3"><img class="gameIcon"
+                                src="{% static 'img/unoLobbyIcon/uno-icon-ready.png' %}" /></a>
+                        {% endif %}
+                    </div>
+                    <div class="col playerDiv">
+                        {% for player in game.game_players.all %}
+                        <img class="circle circlePhoto" src="{% static '' %}{{ player.user.photo }}">
+                        {% endfor %}
+                        {% if game.is_joinable %}
+                        <a class="btn-floating circlePhoto waves-effect waves-light joinableButton"
+                            href="{% url 'unoGame:inGame' game_id=game.id %}" onclick="sendReload()">
+                            <i class="material-icons join-game">add</i>
+                            <!-- {#                                        <input type="hidden" value = {{ game.id }}>#} -->
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col col-lg-3">
+            <div id="playerInfoPanel">
+                {% include 'playerInfoPanel.html' %}
+            </div>
+            <br>
+            <div id="chatPanel">
+                {% include "chatting/chatPanel.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/lobbyChannels.js' %}"></script>
+<script>
+   // (function reload_if_necessary() {
+   //     $.ajax({
+   //         url: 'reload_if_necessary',
+   //         success: function (data) {
+   //             if (data['shouldReload']) {
+   //                 chatSocket.send(JSON.stringify({}));
+   //             }
+   //         },
+   //         {% comment %} complete: function () {
+   //             setTimeout(reload_if_necessary, 3000);
+   //         } {% endcomment %}
+   //     });
+   // })();
+</script>
+<script>
+    $(function () {
+        var button = document.querySelector("#createTableIcon");
+        // {#var buttons = document.querySelector(".join-game");#}
+        button.onclick = function (e) {
+            e.preventDefault();
+            // console.log("here");
+            sendReload();
+            var div = document.createElement("div");
+            div.className += "enterGame animated hinge";
+            var h2 = document.createElement("h2");
+            h2.innerHTML = "U Know Uno";
+            h2.className += "enterRoomFont";
+            div.appendChild(h2);
+            document.body.appendChild(div);
+            setTimeout(function () {
+                location.href = "{% url 'unoGame:createGame' %}";
+            }, 5000);
+        };
+
+
+    })
+</script>
+{% endblock js %}

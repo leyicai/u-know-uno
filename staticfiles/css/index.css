@@ -1,0 +1,28 @@
+.index-img {
+    max-width: 50%;
+    height: auto;
+}
+.image_container{
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
+    text-align: center;
+}
+#background1{
+    height: 30%;
+    width: 100%;
+}
+.information_box{
+    border: darkgrey;
+    text-align: center;
+    padding-right: 10%;
+    padding-left: 10%;
+    margin-bottom: 15%;
+    margin-top: 5%;
+}
+.section-title{
+    font-family: 'Pacifico',
+    cursive;
+}

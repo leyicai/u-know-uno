@@ -1,0 +1,46 @@
+{% extends 'unoGame/uno.html' %}
+{% load static %}
+{% block content %}
+<div class="row align-items-center justify-content-center" id="beforeGameRow">
+    <form id="passwordForm">
+        <label>Enter Game </label>
+        {{ password_form }}
+        {% csrf_token %}
+        {{ login_form }}
+        <button id="submit-pass" class="btn waves-effect waves-light" type="button" onclick="validatePassword()">ENTER GAME
+            <i class="material-icons right">send</i>
+        </button>
+    </form>
+</div>
+
+{% endblock %}
+{% block js %}
+<script>
+    $('#leaveBtn').remove();
+    $('#chatPanel').remove();
+    $('#playerInfoPanel').remove();
+    $('#currentPlayerRow').remove();
+    $('#gamePassword').remove();
+    $('#middleBottomRow').remove();
+
+    function validatePassword() {
+        var data = $('#passwordForm').serialize();
+        $.ajax({
+            type: 'POST',
+            url: 'validatePassword/',
+            data: data,
+            dataType: 'json',
+            success: function (msg) {
+                if (msg['status'] === 'AUTHENTICATED') {
+                    var currentUrl = window.location.href;
+                    var newURL = currentUrl.substring(0, currentUrl.length - 15);
+                    window.location.href = newURL;
+                } else {
+                    alert('Wrong password.');
+                }
+            }
+        });
+    }
+</script>
+<script src="{% static 'js/gameChannels.js' %}"></script>
+{% endblock js %}
